@@ -1,2 +1,4 @@
-/data
+# only ignoring the Big stuff
+/data/aclImdb
+/data/movies.txt
 
