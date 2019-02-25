@@ -60,6 +60,12 @@ y_pred_tf = tf_lsvm.predict(tf_vect.transform(x_test))
 # y_pred_hash = hash_lsvm.predict(hash_vect.transform(x_test))
 # print(y_pred)
 
+def classifier():
+    return tf_lsvm
+
+def vectorizer():
+    return tf_vect
+
 
 # Compute confusion matrix
 # cnf_matrix = confusion_matrix(y_test, y_pred_count)
