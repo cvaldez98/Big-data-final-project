@@ -92,6 +92,14 @@ labels_list = [labels_list.append('neg') for review in negativeReviews]
 
 neg_review_tokens = [indiv_review.split() for indiv_review in negativeReviews]
 review_tokens = pos_review_tokens + neg_review_tokens
+
+# returns tokens of all reviews
+def all_tokens():
+        return review_tokens
+
+# returns the labels_list for pos and neg reviews
+def labels():
+        return labels_list
 # print("review_tokens", str(review_tokens))
 # make labels array with the same number of posReviews and
 
