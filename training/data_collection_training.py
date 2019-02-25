@@ -5,7 +5,7 @@ import os
 from IPython.display import HTML
 
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.feature_extraction import text 
+from sklearn.feature_extraction import text
 from sklearn.decomposition import PCA
 
 from tensorflow.python.keras.models import Sequential, load_model
@@ -17,7 +17,7 @@ import nltk
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.snowball import SnowballStemmer
 from nltk.corpus import words
-from nltk.corpus import wordnet 
+from nltk.corpus import wordnet
 allEnglishWords = words.words() + [w for w in wordnet.words()]
 allEnglishWords = np.unique([x.lower() for x in allEnglishWords])
 
@@ -67,17 +67,17 @@ train = reviews[reviews.label!=-1].sample(frac=0.6, random_state=1)
 valid = reviews[reviews.label!=-1].drop(train.index)
 test = reviews[reviews.label==-1]
 
-pos_review_tokens = [for indiv_review in positiveReviews] 
+pos_review_tokens = [indiv_review.split() for indiv_review in positiveReviews]
 labels_list = []
 
 labels_list = [labels_list.append('pos') for review in positiveReviews]
 labels_list = [labels_list.append('neg') for review in negativeReviews]
 print("labels list", str(labels_list))
 
-neg_review_tokens = [or indiv_review in negativeReviews] 
+neg_review_tokens = [indiv_review.split() for indiv_review in negativeReviews]
 review_tokens = pos_review_tokens + neg_review_tokens
 print("review_tokens", str(review_tokens))
-# make labels array with the same number of posReviews and 
+# make labels array with the same number of posReviews and
 
 print(train.shape)
 print(valid.shape)
