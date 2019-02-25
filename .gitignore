@@ -1,4 +1,5 @@
 # only ignoring the Big stuff
 /data/aclImdb
 /data/movies.txt
-
+/data/movie_samples/*.txt
+/data/Evaluation\ Data
