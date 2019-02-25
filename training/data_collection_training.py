@@ -5,7 +5,6 @@ import re
 import os
 from IPython.display import HTML
 
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction import text
 from sklearn.decomposition import PCA
 
@@ -22,17 +21,7 @@ from nltk.corpus import wordnet
 allEnglishWords = words.words() + [w for w in wordnet.words()]
 allEnglishWords = np.unique([x.lower() for x in allEnglishWords])
 
-import plotly.offline as py
-import plotly.graph_objs as go
-# py.init_notebook_mode(connected=True)
-
 import warnings
-
-# Our imports
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.svm import LinearSVC
-import sklearn.svm as svm
-from imblearn.pipeline import make_pipeline
 
 warnings.filterwarnings('ignore')
 

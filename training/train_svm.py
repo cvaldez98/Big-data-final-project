@@ -17,6 +17,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import HashingVectorizer
 
+import plotly
+import plotly.offline as py
+import plotly.graph_objs as go
+plotly.offline.init_notebook_mode(connected=True)
+
 import itertools
 import matplotlib.pyplot as plt
 
@@ -117,9 +122,9 @@ def plot_confusion_matrix(cm, classes,
 plt.figure()
 # plot_confusion_matrix(cnf_matrix, classes=["neg", "pos"], normalize=True,
 #                       title='Normalized count_vect confusion matrix')
-plot_confusion_matrix(tff_matrix, classes=["neg", "pos"], normalize=True,
-                      title='Normalized count_vect confusion matrix')
+plot_confusion_matrix(tf_matrix, classes=["neg", "pos"], normalize=True,
+                      title='Normalized tf_vect confusion matrix')
 # plot_confusion_matrix(hash_matrix, classes=["neg", "pos"], normalize=True,
-#                       title='Normalized count_vect confusion matrix')
+#                       title='Normalized hash_vect confusion matrix')
 
 plt.show()
