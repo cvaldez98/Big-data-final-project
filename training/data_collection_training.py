@@ -5,7 +5,6 @@ import re
 import os
 from IPython.display import HTML
 
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction import text
 from sklearn.decomposition import PCA
 
@@ -22,17 +21,7 @@ from nltk.corpus import wordnet
 allEnglishWords = words.words() + [w for w in wordnet.words()]
 allEnglishWords = np.unique([x.lower() for x in allEnglishWords])
 
-import plotly.offline as py
-import plotly.graph_objs as go
-# py.init_notebook_mode(connected=True)
-
 import warnings
-
-# Our imports
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.svm import LinearSVC
-import sklearn.svm as svm
-from imblearn.pipeline import make_pipeline
 
 warnings.filterwarnings('ignore')
 
@@ -70,13 +59,15 @@ for tfile in testFiles:
         review = clean_review(f.read())
         testReviews.append(review)
 
+# print("test reviews: " + str(testReviews))
+
 # merge everything into one
 reviews = pd.concat([
     pd.DataFrame({"review":positiveReviews, "label":1, "file":positiveFiles}),
     pd.DataFrame({"review":negativeReviews, "label":0, "file":negativeFiles}),
     pd.DataFrame({"review":testReviews, "label":-1, "file":testFiles})
 ], ignore_index=True).sample(frac=1, random_state=1)
-reviews.head()
+# reviews.head()
 
 reviews = reviews[["review", "label", "file"]].sample(frac=1, random_state=1)
 train = reviews[reviews.label!=-1].sample(frac=0.6, random_state=1)
@@ -86,9 +77,10 @@ test = reviews[reviews.label==-1]
 pos_review_tokens = [indiv_review.split() for indiv_review in positiveReviews]
 labels_list = []
 
-labels_list = [labels_list.append('pos') for review in positiveReviews]
-labels_list = [labels_list.append('neg') for review in negativeReviews]
-# print("labels list", str(labels_list))
+for review in positiveReviews:
+        labels_list.append('pos')
+for review in negativeReviews:
+        labels_list.append('neg')
 
 neg_review_tokens = [indiv_review.split() for indiv_review in negativeReviews]
 review_tokens = pos_review_tokens + neg_review_tokens
@@ -100,6 +92,9 @@ def all_tokens():
 # returns the labels_list for pos and neg reviews
 def labels():
         return labels_list
+
+def all_reviews():
+        return positiveReviews + negativeReviews
 # print("review_tokens", str(review_tokens))
 # make labels array with the same number of posReviews and
 
