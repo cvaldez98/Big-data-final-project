@@ -1,2 +1,3 @@
-# call all the print functions?
-# results evaluation here *
+from evaluation.data_collection_eval import review_tokens
+
+print("TEST")
