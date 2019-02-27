@@ -1,22 +1,24 @@
 import sys
 sys.path.append('../')
-from train_svm import classifier
-from train_svm import vectorizer 
+from train_nb import classifier
+from train_nb import vectorizer 
 from collection.data_collection_eval import extract_features
 
 
 import string
 import numpy as np
-import pandas as pd 
+from numpy import array
+import pandas as pd
 import sklearn.svm as svm
 from sklearn import datasets
-from sklearn.svm import LinearSVC
-from sklearn.metrics import recall_score
+from sklearn.metrics import recall_score, precision_score
+from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import confusion_matrix
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.naive_bayes import BernoulliNB
 from sklearn.preprocessing  import LabelEncoder
-from sklearn.ensemble import RandomForestClassifier
+
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import HashingVectorizer
@@ -31,15 +33,15 @@ import matplotlib.pyplot as plt
 
 eval_review_tokens, eval_labels = extract_features()
 
-tf_lsvm = classifier()
+tf_nb = classifier()
 tf_vect = vectorizer()
 
 ## Score the accuracy of the evaluation set
-tf_score = tf_lsvm.score(tf_vect.transform(eval_review_tokens), eval_labels)
+tf_score = tf_nb.score(tf_vect.transform(eval_review_tokens), eval_labels)
 print("SVM with a TfidfVectorizer performed with an accuracy of " + str(tf_score * 100) + " %")
 
 ## Predict labels of evaluation set
-y_pred_tf = tf_lsvm.predict(tf_vect.transform(eval_review_tokens))
+y_pred_tf = tf_nb.predict(tf_vect.transform(eval_review_tokens))
 
 ## Create confusion matrix
 tf_matrix = confusion_matrix(eval_labels, y_pred_tf)

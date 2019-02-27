@@ -1,7 +1,7 @@
 import sys
 sys.path.append("../")
-from data_collection.data_collection_training import labels
-from data_collection.data_collection_training import all_reviews
+from collection.data_collection_training import labels
+from collection.data_collection_training import all_reviews
 
 import string
 import numpy as np
