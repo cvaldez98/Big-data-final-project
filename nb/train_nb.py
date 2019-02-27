@@ -123,11 +123,8 @@ def plot_confusion_matrix(cm, classes,
 
 # Plot normalized confusion matrix
 plt.figure()
-# # plot_confusion_matrix(cnf_matrix, classes=["neg", "pos"], normalize=True,
-# #                       title='Normalized count_vect confusion matrix')
+
 plot_confusion_matrix(tf_matrix, classes=["neg", "pos"], normalize=True,
                        title='Normalized tf_vect confusion matrix')
-# # plot_confusion_matrix(hash_matrix, classes=["neg", "pos"], normalize=True,
-# #                       title='Normalized hash_vect confusion matrix')
 
 plt.show()

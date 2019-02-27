@@ -38,7 +38,7 @@ tf_vect = vectorizer()
 
 ## Score the accuracy of the evaluation set
 tf_score = tf_nb.score(tf_vect.transform(eval_review_tokens), eval_labels)
-print("SVM with a TfidfVectorizer performed with an accuracy of " + str(tf_score * 100) + " %")
+print("NB with a TfidfVectorizer performed with an accuracy of " + str(tf_score * 100) + " %")
 
 ## Predict labels of evaluation set
 y_pred_tf = tf_nb.predict(tf_vect.transform(eval_review_tokens))
