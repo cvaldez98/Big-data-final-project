@@ -6,11 +6,11 @@ import string
 
 # give a result from the million + reviews
 
-directory = os.fsencode('data/movie_samples/')
+directory = os.fsencode('../data/movie_samples/')
 
-PICKLE_DIR = "data/pickle/"
-EVAL_REVIEWS_PICKLE_PATH = "data/pickle/eval_reviews.pickle"
-EVAL_LABELS_PICKLE_PATH = "data/pickle/eval_labels.pickle"
+PICKLE_DIR = "../data/pickle/"
+EVAL_REVIEWS_PICKLE_PATH = "../data/pickle/eval_reviews.pickle"
+EVAL_LABELS_PICKLE_PATH = "../data/pickle/eval_labels.pickle"
 REVIEW_PREFIX = "review/text"
 LABEL_PREFIX = "review/score: "
 

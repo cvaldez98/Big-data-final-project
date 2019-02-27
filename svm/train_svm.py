@@ -1,6 +1,5 @@
 import sys
 sys.path.append("../")
-#import data_collection.data_collection_training as data_collection_training
 from data_collection.data_collection_training import labels
 from data_collection.data_collection_training import all_reviews
 
@@ -31,9 +30,6 @@ import matplotlib.pyplot as plt
 labels = labels()
 review_tokens = all_reviews()
 
-
-#eval_review_tokens, eval_labels = data_collection_eval.extract_features()
-
 # vectorizer for organizing training/testing data
 count_vect = CountVectorizer()
 tf_vect = TfidfVectorizer()
@@ -61,12 +57,6 @@ hash_lsvm.fit(hash_vect.transform(x_train), y_train)
 count_score = count_lsvm.score(count_vect.transform(x_test), y_test)
 tf_score = tf_lsvm.score(tf_vect.transform(x_test), y_test)
 hash_score = hash_lsvm.score(hash_vect.transform(x_test), y_test)
-#print(x_test[0])
-#print(eval_review_tokens[0])
-#print(y_test[0])
-#print(eval_labels[0])
-#print(type(x_test))
-#print(type(eval_review_tokens))
 
 print("SVM with a CountVectorizer performed with an accuracy of " + str(count_score * 100) + " %")
 print("SVM with a TfidfVectorizer performed with an accuracy of " + str(tf_score * 100) + " %")
@@ -130,24 +120,6 @@ def plot_confusion_matrix(cm, classes,
 
     np.set_printoptions(precision=2)
 
-"""
-
-########################## EVAL #############################
-
-print("REACH 0")
-#count_score = count_lsvm.score(count_vect.transform(eval_review_tokens), eval_labels)
-#tf_score = tf_lsvm.score(tf_vect.transform(eval_review_tokens), eval_labels)
-#hash_score = hash_lsvm.score(hash_vect.transform(eval_review_tokens), eval_labels)
-print("REACH 1")
-y_pred_tf = tf_lsvm.predict(tf_vect.transform(eval_review_tokens))
-print("REACH 2")
-tf_matrix = confusion_matrix(eval_labels, y_pred_tf)
-# hash_matrix = confusion_matrix(y_test, y_pred_hash)
-print("REACH 3")
-# print(cnf_matrix)
-print(tf_matrix)
-# print(hash_matrix)
-"""
 # Plot normalized confusion matrix
 plt.figure()
 # plot_confusion_matrix(cnf_matrix, classes=["neg", "pos"], normalize=True,
