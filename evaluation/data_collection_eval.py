@@ -9,10 +9,13 @@ import string
 directory = os.fsencode('data/movie_samples/')
 
 PICKLE_DIR = "data/pickle/"
-EVAL_PICKLE_PATH = "data/pickle/evaluation.pickle"
+EVAL_REVIEWS_PICKLE_PATH = "data/pickle/eval_reviews.pickle"
+EVAL_LABELS_PICKLE_PATH = "data/pickle/eval_labels.pickle"
 REVIEW_PREFIX = "review/text"
+LABEL_PREFIX = "review/score: "
 
 reviews = []
+true_labels = []
 
 def clean_data(filename):
         eval_set = open(filename, encoding = "ISO-8859-1")
@@ -23,9 +26,19 @@ def clean_data(filename):
                         line = line.lower()
                         #print(line)
                         reviews.append(line[len(REVIEW_PREFIX):])
+                if LABEL_PREFIX in line:
+                        line = float(line[len(LABEL_PREFIX):])
+                        #print(line)
+                        if (line > 3.0):
+                                true_labels.append("pos")
+                        else:
+                                true_labels.append("neg")
+                
 
-        with open(EVAL_PICKLE_PATH, "wb") as fp:   #Pickling
+        with open(EVAL_REVIEWS_PICKLE_PATH, "wb") as fp:   #Pickling
                 pickle.dump(reviews, fp)
+        with open(EVAL_LABELS_PICKLE_PATH, "wb") as fp:   #Pickling
+                pickle.dump(true_labels, fp)
 
 def evaluate_snippet(filename):
         print("evaluating",filename)
@@ -36,7 +49,8 @@ def evaluate_snippet(filename):
 
 def main():
         try:
-                reviews = pickle.load(open(EVAL_PICKLE_PATH, "rb"))
+                reviews = pickle.load(open(EVAL_REVIEWS_PICKLE_PATH, "rb"))
+                labels = pickle.load(open(EVAL_LABELS_PICKLE_PATH, "rb"))
         except (OSError, IOError) as e:
                 if not os.path.exists(PICKLE_DIR):
                         os.makedirs(PICKLE_DIR)
@@ -48,5 +62,8 @@ def main():
 
 def get_reviews():
         return reviews
+def get_labels():
+        return true_labels
         
 main()
+
