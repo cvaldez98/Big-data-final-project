@@ -18,6 +18,8 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.layers import Embedding
 from keras.layers import LSTM
+from keras.layers.embeddings import Embedding
+from keras.preprocessing import sequence
 from tensorflow.python.keras.models import Sequential, load_model
 from tensorflow.python.keras.layers import Dense, Dropout
 from tensorflow.python.keras import optimizers
@@ -90,7 +92,7 @@ mlp_count_score = mlp_count.score(x_test_vect_count, y_test)
 # mlp_hash_score = mlp_hash.score(x_test_vect_hash, y_test)
 
 # print("MLP with a TfidfVectorizer performed with an accuracy of " + str(mlp_score * 100) + " %")
-print("MLP with a count performed with an accuracy of " + str(mlp_count_score * 100) + " %")
+# print("MLP with a count performed with an accuracy of " + str(mlp_count_score * 100) + " %")
 # print("MLP with a hash performed with an accuracy of " + str(mlp_hash_score * 100) + " %")
 
 # y_pred_count = count_lsvm.predict(count_vect.transform(x_test))
@@ -104,10 +106,10 @@ bin_labels = ['pos', 'neg']
 # print("The recall score with tf is " + str(recall_score))
 # print("The percision score with tf is " + str(precision_score))
 
-recall_score_2 = recall_score(y_test, y_pred_count, labels=bin_labels, average=None)
-precision_score_2 = precision_score(y_test, y_pred_count, labels=bin_labels, average=None)
-print("The recall score with count is " + str(recall_score_2))
-print("The percision score with count is " + str(precision_score_2))
+# recall_score_2 = recall_score(y_test, y_pred_count, labels=bin_labels, average=None)
+# precision_score_2 = precision_score(y_test, y_pred_count, labels=bin_labels, average=None)
+# print("The recall score with count is " + str(recall_score_2))
+# print("The percision score with count is " + str(precision_score_2))
 
 # recall_score_3 = recall_score(y_test, y_pred_hash, labels=bin_labels, average=None)
 # precision_score_3 = precision_score(y_test, y_pred_hash, labels=bin_labels, average=None)
@@ -116,25 +118,27 @@ print("The percision score with count is " + str(precision_score_2))
 
 ############### Trying LSTM and Keras (sequential) ##############################
 max_features = 1024
-
-model = Sequential()
-model.add(Embedding(max_features, output_dim=256))
-model.add(LSTM(128))
-model.add(Dropout(0.5))
-model.add(Dense(1, activation='sigmoid'))
-
-model.compile(loss='binary_crossentropy',
-              optimizer='rmsprop',
-              metrics=['accuracy'])
-
-
 x_train_lstm = lstm_vect.transform(x_train)
 x_test_lstm = lstm_vect.transform(x_test)
 
-model.fit(x_train_lstm, y_train, batch_size=16, epochs=10)
-score = model.evaluate(x_test_lstm, y_test, batch_size=16)
+max_review_length = 10000
+X_train = sequence.pad_sequences(x_train_lstm, maxlen=max_review_length)
+X_test = sequence.pad_sequences(x_test_lstm, maxlen=max_review_length)
+# create the model
+embedding_vecor_length = 32
+model = Sequential()
+model.add(Embedding(10000, embedding_vecor_length, input_length=max_review_length))
+model.add(LSTM(100))
+model.add(Dense(1, activation='sigmoid'))
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+print(model.summary())
+model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=3, batch_size=25000)
 
-print("lstm score: " + str(score))
+# Final evaluation of the model
+scores = model.evaluate(X_test, y_test, verbose=0)
+print("Accuracy: %.2f%%" % (scores[1]*100))
+
+# print("lstm score: " + str(score))
 
 def classifier():
     return mlp_count
