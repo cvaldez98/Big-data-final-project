@@ -39,9 +39,9 @@ def clean_data(filename, reviews, true_labels):
         with open(EVAL_LABELS_PICKLE_PATH, "wb") as fp:   #Pickling
                 pickle.dump(true_labels, fp)
 
-def evaluate_snippet(filename, reviews, labels):
+def evaluate_snippet(filename, reviews, true_labels):
         print("evaluating",filename)
-        clean_data(filename, reviews, labels)
+        clean_data(filename, reviews, true_labels)
         # evaluate review
         # here we should use our trained classifier and run it here.
         # maybe we should also print our statistics here?
@@ -51,8 +51,8 @@ def extract_features():
         true_labels = []
         try:
                 reviews = pickle.load(open(EVAL_REVIEWS_PICKLE_PATH, "rb"))
-                labels = pickle.load(open(EVAL_LABELS_PICKLE_PATH, "rb"))
-                return reviews, labels
+                true_labels = pickle.load(open(EVAL_LABELS_PICKLE_PATH, "rb"))
+                return reviews, true_labels
         except (OSError, IOError) as e:
                 if not os.path.exists(PICKLE_DIR):
                         os.makedirs(PICKLE_DIR)
@@ -61,4 +61,4 @@ def extract_features():
                         if(filename.endswith('.txt')):
                                 evaluate_snippet(filename, reviews, true_labels)
                                 continue
-        return reviews, labels
+        return reviews, true_labels
