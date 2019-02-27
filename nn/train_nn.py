@@ -1,6 +1,8 @@
 # use neural networks
-from data_collection_training import labels
-from data_collection_training import all_reviews
+import sys
+sys.path.append("../")
+from collection.data_collection_training import labels
+from collection.data_collection_training import all_reviews
 
 import string
 import numpy as np
@@ -109,11 +111,60 @@ precision_score_2 = precision_score(y_test, y_pred_count, labels=bin_labels, ave
 print("The recall score with count is " + str(recall_score_2))
 print("The percision score with count is " + str(precision_score_2))
 
+# Compute confusion matrix
+mlp_count_matrix = confusion_matrix(y_test, y_pred_count)
+
+print(mlp_count_matrix)
+
 # recall_score_3 = recall_score(y_test, y_pred_hash, labels=bin_labels, average=None)
 # precision_score_3 = precision_score(y_test, y_pred_hash, labels=bin_labels, average=None)
 # print("The recall score with hashing is " + str(recall_score_3))
 # print("The percision score with hashing is " + str(precision_score_3))
 
+def plot_confusion_matrix(cm, classes,
+                          normalize=False,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues):
+    """
+    #This function prints and plots the confusion matrix.
+    #Normalization can be applied by setting `normalize=True`.
+    """
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        print("Normalized confusion matrix")
+    else:
+        print('Confusion matrix, without normalization')
+
+    print(cm)
+
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    fmt = '.2f' if normalize else 'd'
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, format(cm[i, j], fmt),
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.tight_layout()
+
+    np.set_printoptions(precision=2)
+
+# Plot normalized confusion matrix
+plt.figure()
+plot_confusion_matrix(mlp_count_matrix, classes=["neg", "pos"], normalize=True,
+                      title='Normalized mlp_count confusion matrix')
+
+plt.show()
+
+"""
 ############### Trying LSTM and Keras (sequential) ##############################
 max_features = 1024
 
@@ -135,9 +186,9 @@ model.fit(x_train_lstm, y_train, batch_size=16, epochs=10)
 score = model.evaluate(x_test_lstm, y_test, batch_size=16)
 
 print("lstm score: " + str(score))
-
+"""
 def classifier():
     return mlp_count
 
 def vectorizer():
-    return tf_vect
+    return count_vect
