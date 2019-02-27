@@ -11,9 +11,16 @@ from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.feature_extraction.text import HashingVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, HashingVectorizer
+
+import keras
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
+from keras.layers import Embedding
+from keras.layers import LSTM
+from tensorflow.python.keras.models import Sequential, load_model
+from tensorflow.python.keras.layers import Dense, Dropout
+from tensorflow.python.keras import optimizers
 
 import plotly
 import plotly.offline as py
@@ -30,10 +37,12 @@ review_tokens = all_reviews()
 tf_vect = TfidfVectorizer()
 count_vect = CountVectorizer()
 hash_vect = HashingVectorizer()
+lstm_vect = CountVectorizer()
 # tokens must be a list of full reviews
 tf_vect.fit(review_tokens)
 count_vect.fit(review_tokens)
 hash_vect.fit(review_tokens)
+lstm_vect.fit(review_tokens)
 
 
 # split data into training and test set with train_test_split function - setting shuffle to True because, we
@@ -104,6 +113,28 @@ print("The percision score with count is " + str(precision_score_2))
 # precision_score_3 = precision_score(y_test, y_pred_hash, labels=bin_labels, average=None)
 # print("The recall score with hashing is " + str(recall_score_3))
 # print("The percision score with hashing is " + str(precision_score_3))
+
+############### Trying LSTM and Keras (sequential) ##############################
+max_features = 1024
+
+model = Sequential()
+model.add(Embedding(max_features, output_dim=256))
+model.add(LSTM(128))
+model.add(Dropout(0.5))
+model.add(Dense(1, activation='sigmoid'))
+
+model.compile(loss='binary_crossentropy',
+              optimizer='rmsprop',
+              metrics=['accuracy'])
+
+
+x_train_lstm = lstm_vect.transform(x_train)
+x_test_lstm = lstm_vect.transform(x_test)
+
+model.fit(x_train_lstm, y_train, batch_size=16, epochs=10)
+score = model.evaluate(x_test_lstm, y_test, batch_size=16)
+
+print("lstm score: " + str(score))
 
 def classifier():
     return mlp_count
