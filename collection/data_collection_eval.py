@@ -18,20 +18,29 @@ LABEL_PREFIX = "review/score: "
 
 def clean_data(filename, reviews, true_labels):
         eval_set = open(filename, encoding = "ISO-8859-1")
+        no_add = False
         for _, line in enumerate(eval_set):
-                if REVIEW_PREFIX in line:
-                        line = line.replace("<br />", " ")
-                        line = line.translate(line.maketrans(' ',' ',string.punctuation))
-                        line = line.lower()
-                        #print(line)
-                        reviews.append(line[len(REVIEW_PREFIX):])
                 if LABEL_PREFIX in line:
                         line = float(line[len(LABEL_PREFIX):])
                         #print(line)
                         if (line > 3.0):
                                 true_labels.append("pos")
+                        elif line == 3.0:
+                                no_add = True
                         else:
                                 true_labels.append("neg")
+                        continue
+
+                if REVIEW_PREFIX in line:
+                        line = line.replace("<br />", " ")
+                        line = line.translate(line.maketrans(' ',' ',string.punctuation))
+                        line = line.lower()
+                        #print(line)
+                        if (no_add == False):
+                                reviews.append(line[len(REVIEW_PREFIX):])
+                        else:
+                                no_add = False
+                
                 
 
         with open(EVAL_REVIEWS_PICKLE_PATH, "wb") as fp:   #Pickling
